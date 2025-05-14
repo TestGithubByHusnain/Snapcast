@@ -1,0 +1,6 @@
+{
+  "databaseURL": "https://Husnain-Ali-s-workspace-glb3d0.eu-central-1.xata.sh/db/ha_snapcast",
+  "codegen": {
+    "output": "src/xata.ts"
+  }
+}
