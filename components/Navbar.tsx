@@ -1,35 +1,51 @@
-"use client"
+"use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
-const user = {};
+import { authClient } from "@/lib/auth-client";
+import ImageWithFallback from "./ImageWithFallback";
 const Navbar = () => {
-    const router= useRouter();
+  const router = useRouter();
+  const { data: session } = authClient.useSession();
+  const user = session?.user;
+
   return (
     <header className="navbar">
       <nav>
         <Link href="/">
           <Image
             src="/assets/icons/logo.svg"
-            alt="logo"
+            alt="SnapChat Logo"
             width={32}
             height={32}
           />
           <h1>SnapCast</h1>
         </Link>
+
         {user && (
           <figure>
-            <button onClick={() =>router.push(href:'/profile/12345'</figure>)}>
-              <Image
-                src="/assets/images/dummy.jpg"
-                alt="user"
+            <button onClick={() => router.push(`/profile/${session?.user.id}`)}>
+              <ImageWithFallback
+                src={session?.user.image ?? ""}
+                alt="User"
                 width={36}
                 height={36}
                 className="rounded-full aspect-square"
               />
             </button>
-            <button className="cursor-pointer">
+            <button
+              onClick={async () => {
+                return await authClient.signOut({
+                  fetchOptions: {
+                    onSuccess: () => {
+                      redirect("/sign-in");
+                    },
+                  },
+                });
+              }}
+              className="cursor-pointer"
+            >
               <Image
                 src="/assets/icons/logout.svg"
                 alt="logout"
